@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TENG Energy Harvesting Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+            margin: 10px 0;
+        }
+        .metric-label {
+            color: #666;
+            font-size: 14px;
+        }
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-active {
+            background-color: #4CAF50;
+        }
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span class="status-indicator status-active"></span>
+                TENG Energy Harvesting System
+            </h1>
+            <p>Last Updated: <span id="lastUpdate">-</span></p>
+        </div>
+
+        <!-- Real-Time Energy Metrics -->
+        <h2>Real-Time Energy Metrics</h2>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Voltage</div>
+                <div class="metric-value" id="voltage">0 V</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Current</div>
+                <div class="metric-value" id="current">0 μA</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Power</div>
+                <div class="metric-value" id="power">0 μW</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Energy Harvested</div>
+                <div class="metric-value" id="totalEnergy">0 mWh</div>
+            </div>
+        </div>
+
+        <!-- Footfall Activity -->
+        <h2>Footfall Activity</h2>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Total Footfall Count</div>
+                <div class="metric-value" id="footfallCount">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Energy Per Step</div>
+                <div class="metric-value" id="energyPerStep">0 μWh</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Live Footfall Rate</div>
+                <div class="metric-value" id="footfallRate">0 /min</div>
+            </div>
+        </div>
+
+        <!-- Energy Storage Status -->
+        <h2>Energy Storage Status</h2>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Battery Voltage</div>
+                <div class="metric-value" id="batteryVoltage">0 V</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Storage Efficiency</div>
+                <div class="metric-value" id="storageEfficiency">0%</div>
+            </div>
+        </div>
+
+        <!-- Visualization Section -->
+        <h2>Real-Time Visualization</h2>
+        <div class="chart-container">
+            <canvas id="voltageChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="footfallChart"></canvas>
+        </div>
+
+        <!-- Performance Summary -->
+        <h2>System Performance Summary</h2>
+        <div class="performance-grid">
+            <div class="metric-card">
+                <div class="metric-label">Daily Energy Harvest</div>
+                <div class="metric-value" id="dailyEnergy">0 mWh</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Peak Output Today</div>
+                <div class="metric-value" id="peakOutput">0 mW</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Average Power Output</div>
+                <div class="metric-value" id="avgPower">0 mW</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC37ksiwrWav0SLKrmRuP-imJgEZp1yiac",
+            authDomain: "teng-system.firebaseapp.com",
+            databaseURL: "https://teng-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "teng-system",
+            storageBucket: "teng-system.firebasestorage.app",
+            messagingSenderId: "836923963260",
+            appId: "1:836923963260:web:cb2c46de799ba472e516f9",
+            measurementId: "G-LMECF6DQFT"
+        }; 
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const voltageCtx = document.getElementById('voltageChart').getContext('2d');
+        const voltageChart = new Chart(voltageCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Voltage (V)',
+                    data: [],
+                    borderColor: '#2196F3',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const footfallCtx = document.getElementById('footfallChart').getContext('2d');
+        const footfallChart = new Chart(footfallCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Footfall Count',
+                    data: [],
+                    backgroundColor: '#4CAF50'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function updateDashboard(data) {
+            if (!data) return;
+            
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+            
+            document.getElementById('voltage').textContent = `${data.voltage || 0} V`;
+            document.getElementById('current').textContent = `${data.current || 0} μA`;
+            document.getElementById('power').textContent = `${data.power || 0} μW`;
+            document.getElementById('totalEnergy').textContent = `${data.totalEnergy || 0} mWh`;
+            
+        }
+
+        database.ref('TENG').limitToLast(100).on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                updateDashboard(data);
+            }
+        });
+    </script>
+</body>
+</html>
