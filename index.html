@@ -255,7 +255,6 @@
         layer_OpenStreetMap_0;
         map.addLayer(layer_OpenStreetMap_0);
 
-        // Create layers for each year and type
         var layers = {
             '2022': {
                 'mag': new L.imageOverlay('data/2022_Mag_4.png', [[1.8833999999999982,117.995],[23.505,128.8382]], {pane: 'pane_2022_Mag_4'}),
@@ -271,7 +270,6 @@
             }
         };
 
-        // Create panes for all layers
         Object.keys(layers).forEach(year => {
             Object.keys(layers[year]).forEach(type => {
                 const paneId = `pane_${year}_${type}_${Math.floor(Math.random() * 1000)}`;
@@ -281,9 +279,7 @@
             });
         });
 
-        // Function to toggle layers
         function toggleLayer(year, type) {
-            // Remove all layers first
             Object.keys(layers).forEach(y => {
                 Object.keys(layers[y]).forEach(t => {
                     if (map.hasLayer(layers[y][t])) {
@@ -292,24 +288,20 @@
                 });
             });
 
-            // Add selected layer
             map.addLayer(layers[year][type]);
 
-            // Update button states
             document.querySelectorAll('.control-button').forEach(button => {
                 button.classList.remove('active');
             });
             event.target.classList.add('active');
         }
 
-        // Add all layers to the bounds group
         Object.keys(layers).forEach(year => {
             Object.keys(layers[year]).forEach(type => {
                 bounds_group.addLayer(layers[year][type]);
             });
         });
 
-        // Show 2024 magnitude layer by default
         toggleLayer('2024', 'mag');
         document.querySelector('button[onclick="toggleLayer(\'2024\', \'mag\')"]').classList.add('active');
 
