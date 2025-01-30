@@ -1,239 +1,323 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>TENG Energy Harvesting Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <style>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f0f2f5;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #fff0f6, #ffffff);
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+
+        .sidebar {
+            width: 400px;
+            padding: 24px;
+            overflow-y: auto;
+            background: white;
+            box-shadow: 2px 0 10px rgba(255, 182, 193, 0.2);
+            border-right: 1px solid #ffb6c1;
+            z-index: 1000;
         }
-        .header {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+
+        .map-container {
+            flex: 1;
+            height: 100vh;
+            position: relative;
         }
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+
+        #map {
+            height: 100%;
+            width: 100%;
         }
-        .metric-card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .metric-value {
+
+        .title {
+            color: #db2777;
             font-size: 24px;
-            font-weight: bold;
-            color: #2196F3;
-            margin: 10px 0;
+            margin-bottom: 16px;
         }
-        .metric-label {
+
+        .author {
+            color: #f472b6;
+            font-style: italic;
+            margin-bottom: 24px;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            color: #db2777;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .description {
             color: #666;
-            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
         }
-        .chart-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+
+        .year-controls {
+            margin-bottom: 24px;
         }
-        .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 5px;
+
+        .year-label {
+            color: #db2777;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
-        .status-active {
-            background-color: #4CAF50;
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
         }
-        .performance-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+
+        .control-button {
+            padding: 8px 16px;
+            border: 1px solid #ffb6c1;
+            background: white;
+            color: #f472b6;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>
-                <span class="status-indicator status-active"></span>
-                TENG Energy Harvesting System
-            </h1>
-            <p>Last Updated: <span id="lastUpdate">-</span></p>
+
+        .control-button:hover {
+            background: #fff0f6;
+        }
+
+        .control-button.active {
+            background: #f472b6;
+            color: white;
+            border-color: #db2777;
+        }
+
+        .year-data {
+            background: #fff0f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .year-data h4 {
+            color: #db2777;
+            margin: 0 0 8px 0;
+        }
+
+        .year-data p {
+            color: #666;
+            margin: 0;
+            line-height: 1.4;
+        }
+        </style>
+        <title>Philippines Earthquake Map (2022-2024)</title>
+    </head>
+    <body>
+        <div class="sidebar">
+            <h1 class="title">Philippines Earthquake Map</h1>
+            <p class="author">Cartographed by Arabella B. Pacite BSCpE 4B</p>
+
+            <div class="section">
+                <h2 class="section-title">About Earthquakes</h2>
+                <p class="description">
+                    An earthquake is a sudden ground shaking caused by the release of energy in the Earth's crust. The Philippines, located along the Pacific Ring of Fire, experiences frequent seismic activity due to its position along major tectonic plate boundaries.
+                </p>
+            </div>
+
+            <div class="year-controls">
+                <div class="section">
+                    <h3 class="year-label">2022</h3>
+                    <div class="button-group">
+                        <button class="control-button" onclick="toggleLayer('2022', 'mag')">Magnitude</button>
+                        <button class="control-button" onclick="toggleLayer('2022', 'depth')">Depth (km)</button>
+                    </div>
+                    <div class="year-data">
+                        <h4>Key Events</h4>
+                        <p>Significant seismic activity recorded in various regions of the Philippines, with notable events affecting local communities and infrastructure.</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="year-label">2023</h3>
+                    <div class="button-group">
+                        <button class="control-button" onclick="toggleLayer('2023', 'mag')">Magnitude</button>
+                        <button class="control-button" onclick="toggleLayer('2023', 'depth')">Depth (km)</button>
+                    </div>
+                    <div class="year-data">
+                        <h4>Key Events</h4>
+                        <p>Multiple earthquakes recorded throughout the year, highlighting the continued seismic activity in the region.</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="year-label">2024</h3>
+                    <div class="button-group">
+                        <button class="control-button" onclick="toggleLayer('2024', 'mag')">Magnitude</button>
+                        <button class="control-button" onclick="toggleLayer('2024', 'depth')">Depth (km)</button>
+                    </div>
+                    <div class="year-data">
+                        <h4>Key Events</h4>
+                        <p>Recent seismic events showing ongoing tectonic activity in the Philippine archipelago.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">About the Data</h2>
+                <p class="description">
+                    This visualization presents earthquake data in the Philippines from 2022 to 2024. The map shows both magnitude and depth information for recorded seismic events, helping to understand patterns of earthquake activity in the region.
+                </p>
+            </div>
         </div>
 
-        <!-- Real-Time Energy Metrics -->
-        <h2>Real-Time Energy Metrics</h2>
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-label">Voltage</div>
-                <div class="metric-value" id="voltage">0 V</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Current</div>
-                <div class="metric-value" id="current">0 μA</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Power</div>
-                <div class="metric-value" id="power">0 μW</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Total Energy Harvested</div>
-                <div class="metric-value" id="totalEnergy">0 mWh</div>
-            </div>
+        <div class="map-container">
+            <div id="map"></div>
         </div>
 
-        <!-- Footfall Activity -->
-        <h2>Footfall Activity</h2>
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-label">Total Footfall Count</div>
-                <div class="metric-value" id="footfallCount">0</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Energy Per Step</div>
-                <div class="metric-value" id="energyPerStep">0 μWh</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Live Footfall Rate</div>
-                <div class="metric-value" id="footfallRate">0 /min</div>
-            </div>
-        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:false, maxZoom:28, minZoom:1
+        }).fitBounds([[1.1234054665593802,106.12381846928984],[24.09462012357354,138.20961876278173]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
 
-        <!-- Energy Storage Status -->
-        <h2>Energy Storage Status</h2>
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-label">Battery Voltage</div>
-                <div class="metric-value" id="batteryVoltage">0 V</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Storage Efficiency</div>
-                <div class="metric-value" id="storageEfficiency">0%</div>
-            </div>
-        </div>
+        function removeEmptyRowsFromPopupContent(content, feature) {
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            var rows = tempDiv.querySelectorAll('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var td = rows[i].querySelector('td.visible-with-data');
+                var key = td ? td.id : '';
+                if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                    rows[i].parentNode.removeChild(rows[i]);
+                }
+            }
+            return tempDiv.innerHTML;
+        }
 
-        <!-- Visualization Section -->
-        <h2>Real-Time Visualization</h2>
-        <div class="chart-container">
-            <canvas id="voltageChart"></canvas>
-        </div>
-        <div class="chart-container">
-            <canvas id="footfallChart"></canvas>
-        </div>
+        function addClassToPopupIfMedia(content, popup) {
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            if (tempDiv.querySelector('td img')) {
+                popup._contentNode.classList.add('media');
+                setTimeout(function() {
+                    popup.update();
+                }, 10);
+            } else {
+                popup._contentNode.classList.remove('media');
+            }
+        }
 
-        <!-- Performance Summary -->
-        <h2>System Performance Summary</h2>
-        <div class="performance-grid">
-            <div class="metric-card">
-                <div class="metric-label">Daily Energy Harvest</div>
-                <div class="metric-value" id="dailyEnergy">0 mWh</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Peak Output Today</div>
-                <div class="metric-value" id="peakOutput">0 mW</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Average Power Output</div>
-                <div class="metric-value" id="avgPower">0 mW</div>
-            </div>
-        </div>
-    </div>
+        var zoomControl = L.control.zoom({
+            position: 'topleft'
+        }).addTo(map);
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyC37ksiwrWav0SLKrmRuP-imJgEZp1yiac",
-            authDomain: "teng-system.firebaseapp.com",
-            databaseURL: "https://teng-system-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "teng-system",
-            storageBucket: "teng-system.firebasestorage.app",
-            messagingSenderId: "836923963260",
-            appId: "1:836923963260:web:cb2c46de799ba472e516f9",
-            measurementId: "G-LMECF6DQFT"
-        }; 
+        var bounds_group = new L.featureGroup([]);
         
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        const voltageCtx = document.getElementById('voltageChart').getContext('2d');
-        const voltageChart = new Chart(voltageCtx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Voltage (V)',
-                    data: [],
-                    borderColor: '#2196F3',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        const footfallCtx = document.getElementById('footfallChart').getContext('2d');
-        const footfallChart = new Chart(footfallCtx, {
-            type: 'bar',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Footfall Count',
-                    data: [],
-                    backgroundColor: '#4CAF50'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        function updateDashboard(data) {
-            if (!data) return;
-            
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
-            
-            document.getElementById('voltage').textContent = `${data.voltage || 0} V`;
-            document.getElementById('current').textContent = `${data.current || 0} μA`;
-            document.getElementById('power').textContent = `${data.power || 0} μW`;
-            document.getElementById('totalEnergy').textContent = `${data.totalEnergy || 0} mWh`;
-            
+        function setBounds() {
         }
 
-        database.ref('TENG').limitToLast(100).on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                updateDashboard(data);
+        map.createPane('pane_OpenStreetMap_0');
+        map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
+        var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OpenStreetMap_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenStreetMap_0;
+        map.addLayer(layer_OpenStreetMap_0);
+
+        // Create layers for each year and type
+        var layers = {
+            '2022': {
+                'mag': new L.imageOverlay('data/2022_Mag_4.png', [[1.8833999999999982,117.995],[23.505,128.8382]], {pane: 'pane_2022_Mag_4'}),
+                'depth': new L.imageOverlay('data/2022_Depth_1.png', [[1.8833999999999982,117.995],[23.505,128.8382]], {pane: 'pane_2022_Depth_1'})
+            },
+            '2023': {
+                'mag': new L.imageOverlay('data/2023_Mag_5.png', [[-0.11899999999999977,-0.075],[21.925,129.087]], {pane: 'pane_2023_Mag_5'}),
+                'depth': new L.imageOverlay('data/2023_Depth_2.png', [[-0.11899999999999977,-0.075],[21.925,129.087]], {pane: 'pane_2023_Depth_2'})
+            },
+            '2024': {
+                'mag': new L.imageOverlay('data/2024_Mag_6.png', [[1.8329799999999992,117.255],[23.875,128.88156]], {pane: 'pane_2024_Mag_6'}),
+                'depth': new L.imageOverlay('data/2024_Depth_3.png', [[1.8329799999999992,117.255],[23.875,128.88156]], {pane: 'pane_2024_Depth_3'})
+            }
+        };
+
+        // Create panes for all layers
+        Object.keys(layers).forEach(year => {
+            Object.keys(layers[year]).forEach(type => {
+                const paneId = `pane_${year}_${type}_${Math.floor(Math.random() * 1000)}`;
+                map.createPane(paneId);
+                map.getPane(paneId).style.zIndex = 401;
+                layers[year][type].options.pane = paneId;
+            });
+        });
+
+        // Function to toggle layers
+        function toggleLayer(year, type) {
+            // Remove all layers first
+            Object.keys(layers).forEach(y => {
+                Object.keys(layers[y]).forEach(t => {
+                    if (map.hasLayer(layers[y][t])) {
+                        map.removeLayer(layers[y][t]);
+                    }
+                });
+            });
+
+            // Add selected layer
+            map.addLayer(layers[year][type]);
+
+            // Update button states
+            document.querySelectorAll('.control-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Add all layers to the bounds group
+        Object.keys(layers).forEach(year => {
+            Object.keys(layers[year]).forEach(type => {
+                bounds_group.addLayer(layers[year][type]);
+            });
+        });
+
+        // Show 2024 magnitude layer by default
+        toggleLayer('2024', 'mag');
+        document.querySelector('button[onclick="toggleLayer(\'2024\', \'mag\')"]').classList.add('active');
+
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
             }
         });
-    </script>
-</body>
+        </script>
+    </body>
 </html>
