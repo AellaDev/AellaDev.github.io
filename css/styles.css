@@ -451,3 +451,63 @@ body {
         right: 10px;
     }
 }
+
+/* Simple Portfolio Notice Banner */
+.portfolio-notice {
+    background-color: var(--accent);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 100;
+}
+
+.notice-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.notice-content i {
+    font-size: 1rem;
+}
+
+.notice-link {
+    color: white;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: opacity 0.3s;
+}
+
+.notice-link:hover {
+    opacity: 0.8;
+}
+
+/* Responsive adjustments for notice */
+@media (max-width: 768px) {
+    .portfolio-notice {
+        padding: 12px 0;
+    }
+    
+    .notice-content {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .portfolio-notice {
+        font-size: 0.8rem;
+    }
+    
+    .notice-content {
+        padding: 0 15px;
+    }
+}
