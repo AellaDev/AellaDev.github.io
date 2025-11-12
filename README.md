@@ -1,50 +1,66 @@
-==============================================================
-  ||                                                            ||
-  ||   👋 Hello! I'm Arabella, a future Computer Engineering    ||
-  ||      graduate passionate about hardware, software, and AI. ||
-  ||                                                            ||
-  ==============================================================
+# 👋 Hi, I'm Arabella B. Pacite
 
-  🌐 Connect with me:
-  ├── 📧 pacitearabella03@gmail.com
-  ├── 📞 09935778589
-  ├── 🔗 linkedin.com/in/arabellapacite
-  └── 👾 tryhackme.com/p/Aella02
+💻 **Computer Engineering Student · AI & Software Enthusiast · Hardware Prototyper**  
+📍 Bacolod City, Philippines  
+🔗 [GitHub](https://github.com/AellaDev)
 
-  🛠️ Technical Toolkit:
-  * Languages & Tools: C++, Python, Java, Git, Serverless Development 
-  * Development: Prototyping, Circuit Hardware Design, Version Control [cite: 41]
-  * Networking: TCP/IP, Routing, Troubleshooting [cite: 39]
+---
 
-  ⭐ Key Projects & Experience Highlights:
+## 🌟 About Me
+I'm a soon-to-be Computer Engineering graduate with hands-on experience in **Python, Java, serverless development, AI workflows, and hardware prototyping**. I enjoy building projects that blend software and hardware, exploring innovative solutions, and learning new technologies every day.
 
-  1️⃣ Innovative Triboelectric Nanogenerator (Thesis Project)
-    - Role: Hardware Lead / Group Leader [cite: 29]
-    - Accomplishment: Designed and assembled circuit hardware, optimizing energy
-      harvesting efficiency for a sustainable energy solution[cite: 30].
+---
 
-  2️⃣ OJT Intern @ Spring Valley Tech Corp (Feb - May 2025)
-    - Focus: Applied Python, Java, and Serverless Development in prototype applications[cite: 12].
-    - Skill Gained: Hands-on experience in AI workflows and collaborative development[cite: 13].
+## 🛠️ Skills
 
-  3️⃣ Emotion-Based Survey System
-    - Built a Python-based survey platform on Raspberry Pi[cite: 22].
-    - Feature: Integrates real-time emotion detection to improve feedback accuracy[cite: 22].
+**Programming & Tools**
+- Python · Java · C++ · Git · Serverless Development · Raspberry Pi  
+**Networking**
+- TCP/IP · Routing · Troubleshooting  
+**Development**
+- Prototyping · Circuit Hardware Design · Version Control
 
-  4️⃣ RFID Keypad Access Control System
-    - Developed an RFID and PIN-based authentication system with lockout security[cite: 25].
-    - Enhanced system reliability and access control[cite: 25].
+**Soft Skills**
+- Problem-solving · Adaptability · Time management · Attention to detail
 
-  🌱 Soft Skills:
-  * Problem-Solving [cite: 36]
-  * Adaptability [cite: 38]
-  * Time Management [cite: 43]
-  * Attention to Detail [cite: 42]
+---
 
-  🎓 Education:
-  * Bachelor of Science in Computer Engineering 
-    - Carlos Hilado Memorial State University (2021-2025) [cite: 5, 9]
+## 💼 Experience
 
-  -------------------------------------------------------------
-  // Let's build something great together! //
-  -------------------------------------------------------------
+**Spring Valley Tech Corp — OJT Intern** *(Feb 2025 – May 2025)*  
+- Built prototype applications using **Python, Java, and serverless** tech.  
+- Contributed to AI workflows and collaborative development to boost project efficiency.
+
+**Panasiatic Solutions — Customer Support Agent** *(Mar 2023 – Aug 2023)*  
+- Resolved technical/customer issues with clear troubleshooting and follow-up.  
+- Strengthened communication, analytical thinking, and rapid problem-solving abilities.
+
+---
+
+## 🚀 Selected Projects
+
+**Emotion-Based Survey System**  
+- Python survey platform on **Raspberry Pi** with **real-time emotion detection**, improving feedback accuracy through emotion-driven analytics.
+
+**RFID Keypad Access Control System**  
+- RFID + PIN authentication with lockout security, relay-driven door access, and admin reset functions for robust access control.
+
+**Thesis — Innovative Triboelectric Nanogenerator** *(Hardware Lead / Group Leader)*  
+- Designed and assembled circuit hardware for a triboelectric nanogenerator; coordinated testing and integration to meet milestones.
+
+---
+
+## 🌱 Learning & Interests
+AI & Machine Learning · Cybersecurity & Ethical Hacking · IoT & Hardware Prototyping · Sustainable Tech
+
+---
+
+## 🌐 Connect with me:
+  ├── 📧 [pacitearabella03@gmail.com](mailto:pacitearabella03@gmail.com)  
+  ├── 📞 +639935778589  
+  ├── 🔗 [linkedin.com/in/arabellapacite](https://linkedin.com/in/arabellapacite)  
+  └── 👾 [tryhackme.com/p/Aella02](https://tryhackme.com/p/Aella02)
+
+---
+
+✨ **Let’s connect and build something meaningful — always open to collaboration, internships, and interesting projects!**
