@@ -56,6 +56,43 @@ body {
     transition: background-color 0.3s;
 }
 
+/* Simple Portfolio Notice Banner */
+.portfolio-notice {
+    background-color: var(--accent);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 100;
+}
+
+.notice-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.notice-content i {
+    font-size: 1rem;
+}
+
+.notice-link {
+    color: white;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: opacity 0.3s;
+}
+
+.notice-link:hover {
+    opacity: 0.8;
+}
+
 /* Theme Toggle */
 .theme-toggle {
     position: absolute;
@@ -196,6 +233,25 @@ body {
     content: "▸";
     color: var(--accent);
     margin-right: 0.5rem;
+}
+
+/* Sidebar GIF Styles */
+.sidebar-gif {
+    margin-top: auto; /* Push to bottom */
+    padding-top: 2rem;
+    text-align: center;
+    width: 100%;
+}
+
+.tenor-gif-embed {
+    max-width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Ensure sidebar content is properly spaced */
+.sidebar {
+    justify-content: flex-start;
 }
 
 /* Main Content Styles */
@@ -435,6 +491,19 @@ body {
     .projects-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
+    
+    .sidebar-gif {
+        margin-top: 2rem;
+        padding-top: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .notice-content {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
 }
 
 @media (max-width: 576px) {
@@ -450,59 +519,7 @@ body {
         top: 10px;
         right: 10px;
     }
-}
-
-/* Simple Portfolio Notice Banner */
-.portfolio-notice {
-    background-color: var(--accent);
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-    font-size: 0.9rem;
-    position: relative;
-    z-index: 100;
-}
-
-.notice-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.notice-content i {
-    font-size: 1rem;
-}
-
-.notice-link {
-    color: white;
-    font-weight: 600;
-    text-decoration: underline;
-    transition: opacity 0.3s;
-}
-
-.notice-link:hover {
-    opacity: 0.8;
-}
-
-/* Responsive adjustments for notice */
-@media (max-width: 768px) {
-    .portfolio-notice {
-        padding: 12px 0;
-    }
     
-    .notice-content {
-        flex-direction: column;
-        gap: 5px;
-        text-align: center;
-    }
-}
-
-@media (max-width: 576px) {
     .portfolio-notice {
         font-size: 0.8rem;
     }
@@ -510,46 +527,8 @@ body {
     .notice-content {
         padding: 0 15px;
     }
-}
-
-/* Sidebar GIF Styles */
-.sidebar-gif {
-    margin-top: auto; /* Push to bottom */
-    padding-top: 2rem;
-    text-align: center;
-    width: 100%;
-}
-
-.gif-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Ensure sidebar content is properly spaced */
-.sidebar {
-    justify-content: flex-start;
-}
-
-/* Responsive adjustments for GIF */
-@media (max-width: 992px) {
-    .sidebar-gif {
-        margin-top: 2rem;
-        padding-top: 1rem;
-    }
     
-    .gif-image {
-        max-width: 200px;
-    }
-}
-
-@media (max-width: 576px) {
     .sidebar-gif {
         margin-top: 1.5rem;
-    }
-    
-    .gif-image {
-        max-width: 150px;
     }
 }
