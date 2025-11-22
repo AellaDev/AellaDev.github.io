@@ -511,3 +511,45 @@ body {
         padding: 0 15px;
     }
 }
+
+/* Sidebar GIF Styles */
+.sidebar-gif {
+    margin-top: auto; /* Push to bottom */
+    padding-top: 2rem;
+    text-align: center;
+    width: 100%;
+}
+
+.gif-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure sidebar content is properly spaced */
+.sidebar {
+    justify-content: flex-start;
+}
+
+/* Responsive adjustments for GIF */
+@media (max-width: 992px) {
+    .sidebar-gif {
+        margin-top: 2rem;
+        padding-top: 1rem;
+    }
+    
+    .gif-image {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-gif {
+        margin-top: 1.5rem;
+    }
+    
+    .gif-image {
+        max-width: 150px;
+    }
+}
