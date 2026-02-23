@@ -146,11 +146,18 @@
         }
 
         .section-hidden {
-            display: none;
+            display: none !important;
         }
 
         .section-visible {
-            display: block;
+            display: flex !important;
+            flex-direction: column;
+        }
+
+        #home.section-visible {
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Modal styles */
@@ -576,14 +583,14 @@
                     <span class="font-mono text-cyan-400 text-sm">// GET IN TOUCH</span>
                     <h2 class="text-4xl font-bold mt-2 gradient-text">Contact Me</h2>
                 </div>
-                <div class="grid md:grid-cols-2 gap-8">
+                <div class="flex justify-center">
                     <!-- Contact Links -->
                     <div class="card-hover bg-[#111827] rounded-2xl border border-cyan-500/20 p-8">
                         <h3 class="font-bold text-xl mb-6">Let's Connect</h3>
                         <p class="text-gray-400 mb-8">I'm always open to new opportunities, collaboration, or simply a
                             conversation about tech and engineering.</p>
                         <div class="space-y-4">
-                            <a href="https://formsubmit.co/el/wofahi" target="_blank" rel="noopener noreferrer"
+                            <a href="mailto:pacitearabella03@gmail.com"
                                 class="flex items-center gap-4 p-4 rounded-xl bg-gray-800/50 hover:bg-cyan-500/10 transition-colors group">
                                 <div
                                     class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center group-hover:bg-cyan-500/30 transition-colors">
@@ -594,7 +601,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-500">Email</p>
-                                    <p class="text-cyan-400">Send me a message →</p>
+                                    <p class="text-cyan-400">pacitearabella03@gmail.com</p>
                                 </div>
                             </a>
                             <a href="https://linkedin.com/in/arabellapacite" target="_blank"
@@ -642,38 +649,24 @@
                         </div>
                     </div>
 
-                    <!-- Contact Form -->
-                    <div class="card-hover bg-[#111827] rounded-2xl border border-cyan-500/20 p-8">
-                        <h3 class="font-bold text-xl mb-6">Send a Message</h3>
-                        <form id="contact-form" action="https://formsubmit.co/el/wofahi" method="POST"
-                            class="space-y-4">
-                            <!-- FormSubmit configuration -->
-                            <input type="hidden" name="_subject" value="New message from your portfolio!">
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_template" value="table">
-                            <div>
-                                <label for="name" class="block text-sm text-gray-400 mb-2">Name</label>
-                                <input type="text" id="name" name="name" required
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-cyan-500 focus:outline-none transition-colors"
-                                    placeholder="Your name">
-                            </div>
-                            <div>
-                                <label for="email" class="block text-sm text-gray-400 mb-2">Email</label>
-                                <input type="email" id="email" name="email" required
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-cyan-500 focus:outline-none transition-colors"
-                                    placeholder="your@email.com">
-                            </div>
-                            <div>
-                                <label for="message" class="block text-sm text-gray-400 mb-2">Message</label>
-                                <textarea id="message" name="message" rows="4" required
-                                    class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-cyan-500 focus:outline-none transition-colors resize-none"
-                                    placeholder="Your message..."></textarea>
-                            </div>
-                            <button type="submit"
-                                class="w-full py-3 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-xl font-semibold hover:opacity-90 transition-opacity glow-cyan">
-                                Send Message
-                            </button>
-                        </form>
+                    <!-- Send a Message Button -->
+                    <div class="card-hover bg-[#111827] rounded-2xl border border-cyan-500/20 p-8 text-center">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-bold text-xl mb-3">Send a Message</h3>
+                        <p class="text-gray-400 mb-8">Have something to say? Click below and send me a message directly
+                            — I'd love to hear from you!</p>
+                        <a href="https://formsubmit.co/el/wofahi" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-xl font-semibold hover:opacity-90 transition-opacity glow-cyan text-white">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                            </svg>
+                            Send a Message
+                        </a>
                     </div>
                 </div>
             </div>
@@ -854,7 +847,7 @@
             }
         });
 
-        // Contact form is handled by FormSubmit (https://formsubmit.co) — no backend needed.
+
     </script>
 </body>
 
